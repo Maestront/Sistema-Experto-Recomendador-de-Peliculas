@@ -1,6 +1,11 @@
 # Ignorar datasets grandes
 *.tsv.gz
 *.tsv
+
+# PERMITIR el archivo optimizado
+!clean-repo/optimized_data.pkl
+
+# Ignorar otros PKL
 *.pkl
 
 # Ignorar archivos temporales de Python
