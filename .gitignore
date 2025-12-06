@@ -1,0 +1,17 @@
+# Ignorar datasets grandes
+*.tsv.gz
+*.tsv
+*.pkl
+
+# Ignorar archivos temporales de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar entornos virtuales
+venv/
+env/
+
+# Ignorar archivos de logs
+*.log
