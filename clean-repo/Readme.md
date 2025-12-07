@@ -1,87 +1,146 @@
-📽️ Sistema Experto Recomendador de Películas
+# 🎬 Sistema Experto Recomendador de Películas  
+### Basado en IMDb – Python + Pandas + Sistema Híbrido de Recomendación
 
-Proyecto de Sistemas Expertos – CETI
+Este proyecto implementa un **sistema experto recomendador de películas** usando los datasets oficiales de **IMDb** (TSV.GZ).  
+Genera un dataset optimizado y aplica un algoritmo híbrido que combina:
 
-Este proyecto implementa un sistema experto capaz de recomendar películas basado en características como género, duración, calificación, popularidad, año, entre otras.
-El objetivo es ofrecer sugerencias mediante reglas lógicas y procesamiento de datos.
+- Filtrado por género  
+- Segmentación por popularidad (mainstream, mixed, niche)  
+- Weighted Rating (IMDB)  
+- Selección diversa dentro de cada segmento  
 
-🚀 Características principales
+---
 
-Limpieza y preparación del dataset original.
+## 📁 Estructura del repositorio
 
-Generación de un dataset final optimizado.
+clean-repo/
+│
+├── src/
+│ ├── prepare_data.py # Procesa los 4 TSV de IMDB → optimized_data.pkl
+│ ├── final_dataset.py # Convierte optimized → final_dataset.pkl
+│ └── recomendador.py # Algoritmo de recomendación
+│
+├── data/
+│ ├── raw/ # Archivos originales IMDb (.tsv.gz)
+│ └── processed/ # Pickles generados (optimized y final)
+│
+└── README.md
 
-Motor de recomendación basado en reglas (no machine learning).
+yaml
 
-Scripts modulares y fáciles de entender.
 
-Compatible con Python 3.10+.
+---
 
-📂 Estructura del proyecto
-.
-├── recomendador.py        # Motor de reglas para recomendaciones
-├── prepare_data.py        # Limpieza y preprocesamiento del dataset
-├── final_dataset.py       # Generación del dataset final (si aplica)
-├── requirements.txt       # Dependencias del proyecto
-├── README.md
-├── .gitignore
-└── data/
-    ├── raw/               # Datos originales (git ignore)
-    └── processed/         # Datos limpios (git ignore)
+## 📥 1. Descargar los datos de IMDb
 
-🛠️ Instalación
-1. Crear entorno virtual (opcional pero recomendado)
-python -m venv venv
-source venv/bin/activate   # Linux/macOS
-venv\Scripts\activate      # Windows
+El sistema usa **4 archivos oficiales de IMDb** (gratuitos):
 
-2. Instalar dependencias
+| Archivo | Descripción |
+|--------|-------------|
+| `title.basics.tsv.gz` | Información general de películas |
+| `title.ratings.tsv.gz` | Ratings y votos |
+| `title.principals.tsv.gz` | Actores, directores, escritores |
+| `name.basics.tsv.gz` | Información de personas |
 
-Si tienes un archivo requirements.txt:
+Descárgalos desde:  
+📌 https://datasets.imdbws.com/
+
+Luego colócalos en:
+
+data/raw/
+
+yaml
+
+
+---
+
+## ⚙️ 2. Preparar los datos (primer script)
+
+Ejecuta:
+
+python src/prepare_data.py
+
+Esto generará:
+
+data/processed/optimized_data.pkl
+
+Contiene:
+
+Diccionario tconst → info completa
+
+Índice por géneros
+
+Diccionario de personas
+
+Índice invertido de nombres
+
+🧩 3. Crear el dataset final
+Ejecuta:
+
+python src/final_dataset.py
+
+
+Genera:
+
+data/processed/final_dataset.pkl
+Listo para búsquedas y recomendaciones.
+
+🤖 4. Usar el recomendador
+
+Ejemplo desde consola:
+
+python src/recomendador.py
+Ejemplo desde Python:
+
+python
+
+from recomendador import recomendar_por_genero
+
+recs = recomendar_por_genero("Action", perfil="mixed", n=20)
+
+for r in recs:
+    print(r["title"], r["rating"], r["votes"])
+🧠 ¿Cómo funciona el recomendador?
+✔ Segmentación por popularidad
+Se usan percentiles automáticos:
+
+Mainstream → top 20% en votos
+
+Mixed → rango medio
+
+Niche → películas con pocos votos
+
+✔ Perfiles de recomendación
+mainstream → películas populares
+
+mixed → equilibrio entre populares y raras
+
+niche → películas poco conocidas
+
+auto → 50% / 20% / 30%
+
+🧪 Ejemplo de salida
+java
+
+=== RECOMENDACIONES (Action - mixed) ===
+Mad Max: Fury Road (2015) | WR 8.75 | Rating 8.1 | Votes 1,000,000
+John Wick (2014) | WR 8.32 | Rating 7.4 | Votes 600,000
+...
+
+🚀 Requisitos
+Python 3.10+
+
+pandas
+
+numpy
+
+Instalar:
+
 
 pip install -r requirements.txt
-
-📊 Uso del sistema
-1. Preparar datos
-python prepare_data.py
-
-2. Generar dataset final (si aplica)
-python final_dataset.py
-
-3. Ejecutar el recomendador
-python recomendador.py
-
-🧠 Lógica del sistema experto
-
-A diferencia de otros recomendadores, este proyecto utiliza reglas explícitas en lugar de modelos matemáticos.
-
-Ejemplo de regla:
-
-Si el usuario prefiere acción AND la película tiene rating mayor a 8 → recomendar
+🏷 Versionado (SemVer)
+Usa SemVer. Ejemplo:
 
 
-Puedes editar las reglas directamente dentro de recomendador.py para personalizar el comportamiento.
-
-📌 Requisitos
-
-Python 3.10 o superior
-
-Pandas
-
-Numpy
-
-(opcional) Jupyter Notebook si deseas explorar los datos
-
-🏷️ Versionado
-
-Se utiliza Semantic Versioning (SemVer):
-
-MAJOR.MINOR.PATCH
-
-
-Versión actual estable: v0.2.1-clean
-
-🧑‍💻 Autor
-
-Edmundo Sánchez
-Proyecto escolar – CETI
+git tag -a v1.1.0 -m "Versión estable"
+git push --tags
