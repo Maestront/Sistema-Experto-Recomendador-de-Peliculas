@@ -1,17 +1,12 @@
-# 🎬 Sistema Experto Recomendador de Películas  
-### Basado en IMDb – Python + Pandas + Sistema Híbrido de Recomendación
+# 🎬 Sistema Experto Recomendador de Películas
 
-Este proyecto implementa un **sistema experto recomendador de películas** usando los datasets oficiales de **IMDb** (TSV.GZ).  
-Genera un dataset optimizado y aplica un algoritmo híbrido que combina:
+## Descripción del Proyecto
 
-- Filtrado por género  
-- Segmentación por popularidad (mainstream, mixed, niche)  
-- Weighted Rating (IMDB)  
-- Selección diversa dentro de cada segmento  
+Este proyecto implementa un Sistema Experto para la recomendación de películas basado en datos de IMDb y The Movie Database (TMDB). El sistema utiliza el algoritmo de **Weighted Rating (WR)** para clasificar títulos y permite al usuario filtrar las recomendaciones según **géneros**, **perfil de popularidad** (*Mainstream*, *Mixed*, *Niche*), y **criterio de ordenamiento**.
 
----
+La interfaz de usuario está desarrollada con **Streamlit**, ofreciendo una experiencia interactiva y visualmente atractiva con la carga dinámica de portadas de películas obtenidas a través de la API de TMDB, y un diseño optimizado con CSS Flexbox para el centrado de los elementos.
 
-## 📁 Estructura del repositorio
+## Estructura del Repositorio
 
 clean-repo/
 │
@@ -26,121 +21,67 @@ clean-repo/
 │
 └── README.md
 
-yaml
+## 🚀 Requisitos e Instalación
 
+### Requisitos Previos
 
----
+* **Python 3.8+**
+* Una clave de API de **The Movie Database (TMDB)**.
 
-## 📥 1. Descargar los datos de IMDb
+### Pasos de Instalación
 
-El sistema usa **4 archivos oficiales de IMDb** (gratuitos):
+1.  **Clonar el Repositorio:**
+    ```bash
+    git clone [https://github.com/Maestront/Sistema-Experto-Recomendador-de-Peliculas.git](https://github.com/Maestront/Sistema-Experto-Recomendador-de-Peliculas.git)
+    cd Sistema-Experto-Recomendador-de-Peliculas
+    ```
 
-| Archivo | Descripción |
-|--------|-------------|
-| `title.basics.tsv.gz` | Información general de películas |
-| `title.ratings.tsv.gz` | Ratings y votos |
-| `title.principals.tsv.gz` | Actores, directores, escritores |
-| `name.basics.tsv.gz` | Información de personas |
+2.  **Crear y Activar el Entorno Virtual (Recomendado):**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate   # En Linux/macOS
+    venv\Scripts\activate      # En Windows
+    ```
 
-Descárgalos desde:  
-📌 https://datasets.imdbws.com/
+3.  **Instalar Dependencias:**
+    Instala todas las librerías necesarias con el archivo `requirements.txt`.
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Luego colócalos en:
+## 💾 Preparación de Datos
 
-data/raw/
+El sistema necesita datos de IMDb. **Asegúrate de ejecutar estos pasos después de instalar las dependencias:**
 
-yaml
+1.  **Descargar Datos de IMDb:**
+    Descarga los siguientes archivos TSV.GZ desde la página oficial de [IMDb datasets](https://datasets.imdbws.com/):
+    * `title.basics.tsv.gz`
+    * `title.ratings.tsv.gz`
+    * `title.principals.tsv.gz`
+    * `name.basics.tsv.gz`
 
+2.  **Mover Archivos:** Coloca los cuatro archivos `.tsv.gz` descargados en la carpeta `data/raw/`.
 
----
+3.  **Procesar los Datos:** Ejecuta los scripts de preparación y construcción del *dataset* final para generar `final_dataset.pkl`.
+    ```bash
+    python src/prepare_data.py
+    python src/build_final_dataset.py
+    ```
 
-## ⚙️ 2. Preparar los datos (primer script)
+## 💻 Ejecución de la Aplicación
 
-Ejecuta:
+Una vez que tengas el `final_dataset.pkl`, inicia la interfaz de Streamlit:
 
-python src/prepare_data.py
+```bash
+python -m streamlit run app.py
 
-Esto generará:
+La aplicación se abrirá en tu navegador.
 
-data/processed/optimized_data.pkl
+⚙️ Tecnologías Utilizadas
+Lenguaje: Python
 
-Contiene:
+Librerías: Pandas, NumPy, Requests.
 
-Diccionario tconst → info completa
+Interfaz de Usuario: Streamlit
 
-Índice por géneros
-
-Diccionario de personas
-
-Índice invertido de nombres
-
-🧩 3. Crear el dataset final
-Ejecuta:
-
-python src/final_dataset.py
-
-
-Genera:
-
-data/processed/final_dataset.pkl
-Listo para búsquedas y recomendaciones.
-
-🤖 4. Usar el recomendador
-
-Ejemplo desde consola:
-
-python src/recomendador.py
-Ejemplo desde Python:
-
-python
-
-from recomendador import recomendar_por_genero
-
-recs = recomendar_por_genero("Action", perfil="mixed", n=20)
-
-for r in recs:
-    print(r["title"], r["rating"], r["votes"])
-🧠 ¿Cómo funciona el recomendador?
-✔ Segmentación por popularidad
-Se usan percentiles automáticos:
-
-Mainstream → top 20% en votos
-
-Mixed → rango medio
-
-Niche → películas con pocos votos
-
-✔ Perfiles de recomendación
-mainstream → películas populares
-
-mixed → equilibrio entre populares y raras
-
-niche → películas poco conocidas
-
-auto → 50% / 20% / 30%
-
-🧪 Ejemplo de salida
-java
-
-=== RECOMENDACIONES (Action - mixed) ===
-Mad Max: Fury Road (2015) | WR 8.75 | Rating 8.1 | Votes 1,000,000
-John Wick (2014) | WR 8.32 | Rating 7.4 | Votes 600,000
-...
-
-🚀 Requisitos
-Python 3.10+
-
-pandas
-
-numpy
-
-Instalar:
-
-
-pip install -r requirements.txt
-🏷 Versionado (SemVer)
-Usa SemVer. Ejemplo:
-
-
-git tag -a v1.1.0 -m "Versión estable"
-git push --tags
+Fuente de Datos: IMDb y TMDB API

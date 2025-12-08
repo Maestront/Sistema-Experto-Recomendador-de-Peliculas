@@ -48,7 +48,8 @@ def build_final_dataset(opt):
         crew = info.get("crew", []) or []
 
         movies.append({
-            "id": tconst,
+            # *** CORRECCIÓN CRÍTICA: Cambiamos 'id' por 'tconst' ***
+            "tconst": tconst, 
             "title": title,
             "year": year,
             "genres": genres,
