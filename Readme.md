@@ -1,87 +1,69 @@
 # 🎬 Sistema Experto Recomendador de Películas
 
-## Descripción del Proyecto
+**Autor:** [Edmundo Emiliano Sánchez Zúñiga]
+**Versión:** 2.1.0 (Estable)
 
-Este proyecto implementa un Sistema Experto para la recomendación de películas basado en datos de IMDb y The Movie Database (TMDB). El sistema utiliza el algoritmo de **Weighted Rating (WR)** para clasificar títulos y permite al usuario filtrar las recomendaciones según **géneros**, **perfil de popularidad** (*Mainstream*, *Mixed*, *Niche*), y **criterio de ordenamiento**.
+Este proyecto implementa un Sistema Experto Recomendador de Películas basado en datos de IMDb, utilizando un algoritmo de *Weighted Rating* para ofrecer recomendaciones objetivas y personalizadas a los usuarios mediante una interfaz interactiva de Streamlit.
 
-La interfaz de usuario está desarrollada con **Streamlit**, ofreciendo una experiencia interactiva y visualmente atractiva con la carga dinámica de portadas de películas obtenidas a través de la API de TMDB, y un diseño optimizado con CSS Flexbox para el centrado de los elementos.
+---
 
-## Estructura del Repositorio
+## ✨ Características Clave del Sistema
 
-clean-repo/
-│
-├── src/
-│ ├── prepare_data.py # Procesa los 4 TSV de IMDB → optimized_data.pkl
-│ ├── final_dataset.py # Convierte optimized → final_dataset.pkl
-│ └── recomendador.py # Algoritmo de recomendación
-│
-├── data/
-│ ├── raw/ # Archivos originales IMDb (.tsv.gz)
-│ └── processed/ # Pickles generados (optimized y final)
-│
-└── README.md
+* **Algoritmo de Weighted Rating (WR):** Utiliza la fórmula WR para clasificar las películas de manera objetiva, balanceando la calificación promedio y el número de votos, priorizando títulos con alta popularidad y buena crítica.
+* **Recomendaciones Filtradas:** Permite al usuario filtrar las películas basándose en:
+    * **Géneros:** Búsqueda avanzada por uno o múltiples géneros.
+    * **Popularidad:** Opciones de perfil *Mainstream* (ampliamente votadas) o *Niche* (menos conocidas pero bien valoradas).
+* **Integración de Metadatos:** Conectividad con la API de The Movie Database (TMDB) para obtener las **URLs de los pósteres** de las películas y mejorar la experiencia visual en la interfaz.
+* **Interfaz de Usuario (Streamlit):** Una aplicación web simple e intuitiva para interactuar con el motor de recomendaciones.
 
-## 🚀 Requisitos e Instalación
+---
 
-### Requisitos Previos
+## 🛠️ Configuración e Instalación
 
-* **Python 3.8+**
-* Una clave de API de **The Movie Database (TMDB)**.
+### 1. Clonar el Repositorio
 
-### Pasos de Instalación
-
-1.  **Clonar el Repositorio:**
-    ```bash
-    git clone [https://github.com/Maestront/Sistema-Experto-Recomendador-de-Peliculas.git](https://github.com/Maestront/Sistema-Experto-Recomendador-de-Peliculas.git)
-    cd Sistema-Experto-Recomendador-de-Peliculas
-    ```
-
-2.  **Crear y Activar el Entorno Virtual (Recomendado):**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate   # En Linux/macOS
-    venv\Scripts\activate      # En Windows
-    ```
-
-3.  **Instalar Dependencias:**
-    Instala todas las librerías necesarias con el archivo `requirements.txt`.
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-## 💾 Preparación de Datos
-
-El sistema necesita datos de IMDb. **Asegúrate de ejecutar estos pasos después de instalar las dependencias:**
-
-1.  **Descargar Datos de IMDb:**
-    Descarga los siguientes archivos TSV.GZ desde la página oficial de [IMDb datasets](https://datasets.imdbws.com/):
-    * `title.basics.tsv.gz`
-    * `title.ratings.tsv.gz`
-    * `title.principals.tsv.gz`
-    * `name.basics.tsv.gz`
-
-2.  **Mover Archivos:** Coloca los cuatro archivos `.tsv.gz` descargados en la carpeta `data/raw/`.
-
-3.  **Procesar los Datos:** Ejecuta los scripts de preparación y construcción del *dataset* final para generar `final_dataset.pkl`.
-    ```bash
-    python src/prepare_data.py
-    python src/build_final_dataset.py
-    ```
-
-## 💻 Ejecución de la Aplicación
-
-Una vez que tengas el `final_dataset.pkl`, inicia la interfaz de Streamlit:
+Clona este repositorio a tu máquina local:
 
 ```bash
+git clone [https://github.com/Maestront/Sistema-Experto-Recomendador-de-Peliculas.git](https://github.com/Maestront/Sistema-Experto-Recomendador-de-Peliculas.git)
+cd Sistema-Experto-Recomendador-de-Peliculas
+
+```
+2. Crear Entorno Virtual (Recomendado)
+
+```bash
+python -m venv venv
+# Activar entorno en Windows
+.\venv\Scripts\activate
+# Activar entorno en macOS/Linux
+source venv/bin/activate
+```
+3. Instalar Dependencias
+Instala todas las librerías necesarias (como Streamlit, pandas, requests, etc.):
+
+```bash
+pip install -r requirements.txt
+```
+💾 Preparación de Datos (Paso Crucial)
+Debido al gran tamaño de los archivos de dataset procesados (superiores al límite de 2 GB de GitHub LFS), estos se alojan en Hugging Face Hub. Es obligatorio descargar estos archivos antes de ejecutar la aplicación.
+
+Ejecuta el script de descarga:
+
+```bash
+
+python src/download_data.py
+```
+Este comando:
+
+Creará la carpeta data/processed/.
+
+Descargará automáticamente los archivos final_dataset.pkl y optimized_data.pkl y los colocará en la carpeta data/processed/.
+
+🚀 Ejecución de la Aplicación
+Una vez que la descarga de datos haya finalizado, puedes iniciar la aplicación Streamlit:
+
+```bash
+
 python -m streamlit run app.py
-
-La aplicación se abrirá en tu navegador.
-
-⚙️ Tecnologías Utilizadas
-Lenguaje: Python
-
-Librerías: Pandas, NumPy, Requests.
-
-Interfaz de Usuario: Streamlit
-
-Fuente de Datos: IMDb y TMDB API
+```
+Tu navegador abrirá automáticamente la interfaz del Sistema Experto Recomendador de Películas.
